@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lily/constants/imgRefs.dart';
-import 'package:lily/screen/Dashboard/home.dart';
+import 'package:lily/screen/auth/loginScreen.dart';
 import 'package:lily/widgets/loadingScreen.dart';
 import 'package:lily/widgets/otpTextField.dart';
+import 'package:lily/widgets/snackbarView.dart';
 
 class PhoneVerify extends StatefulWidget {
+  const PhoneVerify({super.key});
+
   @override
   State<PhoneVerify> createState() => PhoneVerifyState();
 }
@@ -16,6 +21,8 @@ class PhoneVerifyState extends State<PhoneVerify> {
   final valOTP2 = TextEditingController();
   final valOTP3 = TextEditingController();
   final valOTP4 = TextEditingController();
+
+  bool isFailed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -132,12 +139,35 @@ class PhoneVerifyState extends State<PhoneVerify> {
                             width: double.infinity,
                             child: ElevatedButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (_) => LoadingScreen(
-                                          screen: HomeScreen(selectedIndex: 0)),
-                                    ),
-                                  );
+                                  //After authentication result
+                                  //If there is network failure
+                                  showCloseSnackBar(context,
+                                      isNO: true,
+                                      title: "oops...Snap!",
+                                      msg: "Network failure, connect internet");
+
+                                  //If the user signup failed
+                                  // showCloseSnackBar(context,
+                                  //     isNO: true,
+                                  //     title: "User Verification",
+                                  //     msg:
+                                  //         "User verification failed, try again");
+                                  // setState(() {
+                                  //   isFailed = true;
+                                  // });
+
+                                  //If the user created successfully
+                                  showCloseSnackBar(context,
+                                      title: "User Verification",
+                                      msg: "User verification is successful");
+                                  Timer(const Duration(seconds: 5), () {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (_) => LoadingScreen(
+                                            screen: const LoginScreen()),
+                                      ),
+                                    );
+                                  });
                                 },
                                 style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(20),
@@ -154,6 +184,10 @@ class PhoneVerifyState extends State<PhoneVerify> {
                                 )),
                           ),
                         ),
+                        if (isFailed)
+                          TextButton(
+                              onPressed: () {},
+                              child: const Text("Resend code"))
                       ],
                     ),
                   ],

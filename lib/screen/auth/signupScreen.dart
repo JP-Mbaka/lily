@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lily/constants/imgRefs.dart';
 import 'package:lily/screen/auth/loginScreen.dart';
 import 'package:lily/screen/auth/phoneVerifyScreen.dart';
 import 'package:lily/widgets/loadingScreen.dart';
+import 'package:lily/widgets/snackbarView.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -322,13 +325,32 @@ class SignupScreenState extends State<SignupScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (_) => LoadingScreen(
-                            screen: PhoneVerify(),
+                      //After authentication result
+                      //If there is network failure
+                      // showCloseSnackBar(context,
+                      //     isNO: true,
+                      //     title: "oops...Snap!",
+                      //     msg: "Network failure, connect internet");
+
+                      //If the user signup failed
+                      // showCloseSnackBar(context,
+                      //     isNO: true,
+                      //     title: "Account Creation Failed",
+                      //     msg: "Check connection and try again");
+
+                      //If the user created successfully
+                      showCloseSnackBar(context,
+                          title: "Account Created Successful",
+                          msg: "User Account is created successfully");
+                      Timer(const Duration(seconds: 5), () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (_) => LoadingScreen(
+                              screen: const PhoneVerify(),
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.all(20),
@@ -352,9 +374,11 @@ class SignupScreenState extends State<SignupScreen> {
                 ),
                 TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (_) =>
-                              LoadingScreen(screen: const LoginScreen())));
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => const LoginScreen(),
+                        ),
+                      );
                     },
                     child: Text(
                       "Login",

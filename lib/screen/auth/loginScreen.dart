@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lily/constants/imgRefs.dart';
 import 'package:lily/screen/auth/forgottenPassScreen.dart';
 import 'package:lily/screen/auth/signupScreen.dart';
 import 'package:lily/screen/Dashboard/home.dart';
 import 'package:lily/widgets/loadingScreen.dart';
+import 'package:lily/widgets/popUpAlert.dart';
+import 'package:lily/widgets/snackbarView.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -132,12 +136,37 @@ class LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (_) => LoadingScreen(
-                              screen: HomeScreen(selectedIndex: 0)),
-                        ),
-                      );
+                      //After authentication result
+                      //If there is network failure
+                      // showCloseSnackBar(context,
+                      //     isNO: true,
+                      //     title: "oops...Snap!",
+                      //     msg: "Network failure, connect internet");
+
+                      //If the user logged failed
+                      // showCloseSnackBar(context,
+                      //     isNO: true,
+                      //     title: "Login Failed",
+                      //     msg: "User is not logged in, try again");
+
+                      //If the user logged in successfully
+                      // showCloseSnackBar(context,
+                      //     title: "Login Successful",
+                      //     msg: "User is logged in successfully");
+
+                      // Timer(const Duration(seconds: 5), () {
+                      //   Navigator.of(context).pushReplacement(
+                      //     MaterialPageRoute(
+                      //       builder: (_) => LoadingScreen(
+                      //           screen: HomeScreen(selectedIndex: 0)),
+                      //     ),
+                      //   );
+                      // });
+                      PopDialogs.popDialogs(
+                          context: context,
+                          title: "Test",
+                          message: "Testing the application",
+                          onPressYes: () {});
                     },
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.all(20),
@@ -162,8 +191,7 @@ class LoginScreenState extends State<LoginScreen> {
                 TextButton(
                     onPressed: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (_) =>
-                              LoadingScreen(screen: const SignupScreen())));
+                          builder: (_) => const SignupScreen()));
                     },
                     child: Text(
                       "Create Account",
