@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lily/constants/imgRefs.dart';
 import 'package:lily/constants/variables.dart';
 
 class PopDialogs extends StatefulWidget {
-  PopDialogs({
+  const PopDialogs({
     super.key,
     required this.title,
     required this.message,
+    this.yes,
+    this.no,
     required this.onPressYes,
   });
-  final String title;
-  final String message;
+  final String title, message;
+  final String? yes, no;
   final void Function() onPressYes;
 
   @override
   State<PopDialogs> createState() => _PopDialogsState();
 
-  static alertMessage({required context, icon, message, goback = false}) {
+  static alertMessage({required context, icon, message, goback}) {
     showDialog(
         context: context,
         builder: (context) => _alertMessage(
@@ -33,28 +36,45 @@ class PopDialogs extends StatefulWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      title: (icon != null)
-          ? Image.asset(failedTIcon) // SvgPicture.asset(icon)
-          : CircleAvatar(
-              radius: height(context) * 0.06,
-              backgroundColor: Colors.greenAccent, //GREEN.withOpacity(0.2),
-              child: Image.asset(successTIcon)
-              // SvgPicture.asset(
-              //   successIcon,
-              //   height: height(context) * 0.08,
-              // ),
+      title: CircleAvatar(
+        radius: height(context) * 0.06,
+        backgroundColor: (icon != null)
+            ? Theme.of(context).colorScheme.errorContainer
+            : Theme.of(context).colorScheme.primaryContainer,
+        child: (icon != null)
+            ? SvgPicture.asset(
+                icon,
+                height: height(context) * 0.08,
+              )
+            : SvgPicture.asset(
+                successIcon,
+                height: height(context) * 0.08,
               ),
+      ),
       content: Text(
         message,
         textAlign: TextAlign.center,
-        // style: mediumBodyStyle(),
+        style: Theme.of(context)
+            .textTheme
+            .bodyMedium!
+            .copyWith(color: Theme.of(context).colorScheme.onTertiaryContainer),
       ),
-      actionsAlignment: MainAxisAlignment.spaceEvenly,
+      actionsAlignment: MainAxisAlignment.center,
       actions: [
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pop();
+            if (goback == 2) {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }
+            if (goback) {
+              Navigator.pop(context);
+            }
+          },
           child: const Text("Close"),
         ),
+
         // primaryButton(
         //   text: 'Close',
         //   hPadding: width(context) * 0.15,
@@ -75,6 +95,8 @@ class PopDialogs extends StatefulWidget {
     required context,
     title,
     message,
+    String? yes,
+    String? no,
     onPressYes,
   }) {
     showDialog(
@@ -83,6 +105,8 @@ class PopDialogs extends StatefulWidget {
       builder: (context) => PopDialogs(
         title: title,
         message: message,
+        yes: yes,
+        no: no,
         onPressYes: onPressYes,
       ),
     );
@@ -100,34 +124,37 @@ class _PopDialogsState extends State<PopDialogs> {
       title: Text(
         widget.title,
         textAlign: TextAlign.center,
-        // style: mediumBodyStyle(
-        //   weight: FontWeight.bold,
-        //   fontSize: 16.0,
-        // ),
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.w500),
       ),
       content: Text(
         widget.message,
         textAlign: TextAlign.center,
-        // style: mediumBodyStyle(color: GREY2.withOpacity(0.6)),
+        style: Theme.of(context)
+            .textTheme
+            .bodyMedium!
+            .copyWith(color: Theme.of(context).colorScheme.onTertiaryContainer),
       ),
       actionsAlignment: MainAxisAlignment.spaceEvenly,
       actions: [
         TextButton(
-            onPressed: widget.onPressYes,
-            child: Text(
-              'Delete',
-              // style: mediumBodyStyle(
-              //   color: RED1,
-              //   weight: FontWeight.w500,
-              // ),
-            )),
-        TextButton(
             onPressed: () {
-              // Get.back();
+              Navigator.pop(context);
             },
             child: Text(
-              'Cancel',
-              // style: mediumBodyStyle(weight: FontWeight.w500),
+              widget.no ?? 'Delete',
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+            )),
+        TextButton(
+            onPressed: widget.onPressYes,
+            child: Text(
+              widget.yes ?? 'Continue',
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w500),
             )),
         SizedBox(height: height(context) * 0.05),
       ],

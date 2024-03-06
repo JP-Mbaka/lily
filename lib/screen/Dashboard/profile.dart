@@ -1,12 +1,16 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lily/constants/imgRefs.dart';
 import 'package:lily/constants/variables.dart';
 import 'package:lily/screen/Dashboard/faqs.dart';
 import 'package:lily/screen/Dashboard/getHelp.dart';
 import 'package:lily/screen/auth/forgottenPassScreen.dart';
-import 'package:lily/screen/auth/phoneVerifyScreen.dart';
 import 'package:lily/widgets/buildProfile.dart';
 import 'package:lily/widgets/loadingScreen.dart';
+import 'package:lily/widgets/popUpAlert.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -258,12 +262,27 @@ class ProfileState extends State<Profile> {
                     height: height(context) * 0.05,
                   ),
                   buildProfileMenu(context, onClick: () {
-                    //Logout the token key here
-                    // Get.to(() => OnboardingScreen(),
-                    //     transition: Transition.fadeIn,
-                    //     duration: const Duration(
-                    //       milliseconds: ROUTE_DURATION,
-                    //     ));
+                    PopDialogs.popDialogs(
+                        context: context,
+                        title: "Delete Account",
+                        message:
+                            "Are you sure you want to delete your account?",
+                        yes: "Yes",
+                        no: "No",
+                        onPressYes: () {
+                          //We delete the account from database asynchronously
+                          PopDialogs.alertMessage(
+                            icon: failedIcon,
+                            context: context,
+                            message: "Acount deleted successfully",
+                          );
+                          Timer(const Duration(seconds: 5), () {
+                            Platform.isIOS
+                                ? SystemChannels.platform
+                                    .invokeMethod('SystemNavigator.pop')
+                                : exit(0);
+                          });
+                        });
                   },
                       icon: Icon(
                         Icons.logout,

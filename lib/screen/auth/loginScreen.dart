@@ -6,7 +6,6 @@ import 'package:lily/screen/auth/forgottenPassScreen.dart';
 import 'package:lily/screen/auth/signupScreen.dart';
 import 'package:lily/screen/Dashboard/home.dart';
 import 'package:lily/widgets/loadingScreen.dart';
-import 'package:lily/widgets/popUpAlert.dart';
 import 'package:lily/widgets/snackbarView.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -119,8 +118,7 @@ class LoginScreenState extends State<LoginScreen> {
                 child: TextButton(
                   onPressed: () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (_) =>
-                            LoadingScreen(screen: const ForgotPassScreen())));
+                        builder: (_) => const ForgotPassScreen()));
                   },
                   child: Text(
                     "Forgotten password? Click here",
@@ -150,23 +148,18 @@ class LoginScreenState extends State<LoginScreen> {
                       //     msg: "User is not logged in, try again");
 
                       //If the user logged in successfully
-                      // showCloseSnackBar(context,
-                      //     title: "Login Successful",
-                      //     msg: "User is logged in successfully");
+                      showCloseSnackBar(context,
+                          title: "Login Successful",
+                          msg: "User is logged in successfully");
 
-                      // Timer(const Duration(seconds: 5), () {
-                      //   Navigator.of(context).pushReplacement(
-                      //     MaterialPageRoute(
-                      //       builder: (_) => LoadingScreen(
-                      //           screen: HomeScreen(selectedIndex: 0)),
-                      //     ),
-                      //   );
-                      // });
-                      PopDialogs.popDialogs(
-                          context: context,
-                          title: "Test",
-                          message: "Testing the application",
-                          onPressYes: () {});
+                      Timer(const Duration(seconds: 5), () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (_) => LoadingScreen(
+                                screen: HomeScreen(selectedIndex: 0)),
+                          ),
+                        );
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.all(20),

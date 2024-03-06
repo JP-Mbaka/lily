@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lily/constants/imgRefs.dart';
 import 'package:lily/screen/auth/loginScreen.dart';
+import 'package:lily/screen/auth/phoneVerifyScreen.dart';
 import 'package:lily/screen/auth/signupScreen.dart';
 import 'package:lily/widgets/loadingScreen.dart';
+import 'package:lily/widgets/popUpAlert.dart';
 
 class ForgotPassScreen extends StatefulWidget {
   const ForgotPassScreen({super.key});
@@ -89,7 +91,33 @@ class ForgotPassScreenState extends State<ForgotPassScreen> {
                             child: SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    if ((usernameCOntroller.text.length < 10) ||
+                                        usernameCOntroller.text.isEmpty ||
+                                        !usernameCOntroller.text
+                                            .contains(RegExp(r'[@|.]'))) {
+                                      PopDialogs.alertMessage(
+                                        icon: failedIcon,
+                                        context: context,
+                                        message: "Enter a valid email address",
+                                      );
+                                    } else {
+                                      PopDialogs.popDialogs(
+                                          context: context,
+                                          title: "Password Reset",
+                                          message:
+                                              "Are you sure you want to reset your password?",
+                                          yes: "Yes",
+                                          no: "No",
+                                          onPressYes: () {
+                                            Navigator.of(context).pushReplacement(
+                                                MaterialPageRoute(
+                                                    builder: (_) => LoadingScreen(
+                                                        screen:
+                                                            const PhoneVerify())));
+                                          });
+                                    }
+                                  },
                                   style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsets.all(20),
                                       elevation: 5,
@@ -115,9 +143,8 @@ class ForgotPassScreenState extends State<ForgotPassScreen> {
             Center(
               child: TextButton(
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (_) =>
-                          LoadingScreen(screen: const LoginScreen())));
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (_) => const LoginScreen()));
                 },
                 child: Text(
                   "Login to your account",
@@ -136,9 +163,8 @@ class ForgotPassScreenState extends State<ForgotPassScreen> {
                 ),
                 TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (_) =>
-                              LoadingScreen(screen: const SignupScreen())));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => const SignupScreen()));
                     },
                     child: Text(
                       "Create Account",

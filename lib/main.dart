@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'DMO',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
@@ -32,14 +32,16 @@ class MyApp extends StatelessWidget {
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color.fromRGBO(142, 219, 146, 1),
+          seedColor: const Color.fromRGBO(142, 219, 146, 1),
         ),
-        appBarTheme: AppBarTheme().copyWith(
+
+        appBarTheme: const AppBarTheme().copyWith(
             titleTextStyle:
-                TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             backgroundColor: Color.fromRGBO(43, 119, 47, 1),
             foregroundColor: Color.fromRGBO(235, 235, 235, 1)),
         useMaterial3: true,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: LoadingScreen(screen: const LoginScreen()),
     );
